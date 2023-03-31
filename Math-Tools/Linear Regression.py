@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 # 设置 x_name 和 y_name
-x_name = "r^2"
-y_name = "k"
+x_name = "k"
+y_name = "r^2"
 
 # 生成数据
-np.random.seed(0)
-X = np.random.rand(50)
-Y = 2 * X + 1 + 0.1 * np.random.randn(50)
+X = np.array([0, 1, 2, 3, 4])
+Y = np.array([17/2, 24/2, 30.5/2, 35/2, 39/2])
+Y = Y ** 2
 
 # 计算线性回归参数
 slope, intercept, r_value, p_value, std_err = linregress(X, Y)
