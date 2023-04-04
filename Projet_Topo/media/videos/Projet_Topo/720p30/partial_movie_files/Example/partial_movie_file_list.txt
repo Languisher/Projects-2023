@@ -1,0 +1,7 @@
+# This file is used internally by FFMPEG.
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/2784475897_3015698720_2389781236.mp4'
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/1731047148_1828148299_721233797.mp4'
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/1212208263_3931201982_1142090114.mp4'
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/2525380815_3154569824_3480775834.mp4'
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/2837797657_1559884176_2944169073.mp4'
+file 'file:/Users/linnan/Desktop/23-Manim/Projet_Topo/media/videos/Projet_Topo/720p30/partial_movie_files/Example/2558956906_2659909038_512351301.mp4'
