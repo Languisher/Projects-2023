@@ -1,0 +1,134 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{framed}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+
+\colorlet{LightGray}{White!90!Periwinkle}
+\colorlet{LightOrange}{Orange!15}
+\colorlet{LightGreen}{Green!15}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+
+\declaretheoremstyle[name=Théorème,]{thmsty}
+\declaretheorem[style=thmsty,numberwithin=section]{theorem}
+\tcolorboxenvironment{theorem}{colback=LightGray}
+
+\declaretheoremstyle[name=Proposition,]{prosty}
+\declaretheorem[style=prosty,numberlike=theorem]{proposition}
+\tcolorboxenvironment{proposition}{colback=LightOrange}
+
+\declaretheoremstyle[name=Propriété,]{prcpsty}
+\declaretheorem[style=prcpsty,numberlike=theorem]{principle}
+\tcolorboxenvironment{principle}{colback=LightOrange}
+
+\declaretheoremstyle[name=Définition,]{defisty}
+\declaretheorem[style=defisty,numberlike=theorem]{definition}
+\tcolorboxenvironment{definition}{colback=LightGreen}
+
+\setstretch{1.2}
+\geometry{
+    textheight=9in,
+    textwidth=5.5in,
+    top=1in,
+    headheight=12pt,
+    headsep=25pt,
+    footskip=30pt
+}
+
+% ------------------------------------------------------------------------------
+
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% Cover Page and ToC
+% ------------------------------------------------------------------------------
+
+\title{ \normalsize \textsc{}
+        \\ [2.0cm]
+        \HRule{1.5pt} \
+        \LARGE \textbf{\uppercase{Topologie}
+        \HRule{2.0pt} \\ [0.6cm] \LARGE{Question 2} \vspace*{10\baselineskip}}
+        }
+\date{}
+\author{\textbf{Author} \ 
+        Brandon Lin}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+% ------------------------------------------------------------------------------
+
+\section{Exercice 2}
+
+\textit{Notations}
+
+\begin{itemize}
+    \item $(x_n^{(p)})_{n \in \mathbb{N} } \in K_p^{\mathbb{N} }$ une suite de $K_p$
+    \item $(x_{\phi_p(n)}^{(p)})$ une sous-suite de $(x_n^{(p)})$
+    \item $\lambda_p$ un vecteur dans $K_p$
+    \item $(x_n)_{n \in \mathbb{N} } \in K^\mathbb{N}$ une suite de $K$
+        \[
+            x_n = \left( x_n^{(1)} , \ldots, x_n^{(p)}\right) \in \prod_{t=1}^p K_t^\mathbb{N} 
+        \]
+        
+    \item $(x_{\phi(n)})$ une sous-suite de $(x_n)$
+    \item $\lambda$ un vecteur dans $K$
+
+\end{itemize}
+
+\noindent \textit{Résolution générale}
+
+Comme $(E_0, d_0),\ldots,(E_n,d_n)$ sont des espaces métriques compactes, soit $(x_n)_{n \in \mathbb{N} } \in K^\mathbb{N}$ une suite de $K$
+        \[
+            x_n = \left( x_n^{(0)} , \ldots, x_n^{(p)}\right) \in \prod_{t=0}^p K_t^\mathbb{N} 
+        \]
+
+De la suite $\left( x_n^{(0)} \right) \in K_0^\mathbb{N}$ on extrait une sous-suite $\left( x_{\phi_0(n)}^{(0)} \right)$ qui tend vers $\lambda_0 \in K_0$.
+
+De la suite $(x_{\phi_0(n)}^{(0)})$, on extrait une sous-suite $\left( x_{\phi_0 \circ\phi_1(n)}^{(1)} \right)$ qui tend vers $\lambda_1 \in K_1$.
+
+De même façon pour tout $p \in \mathbb{N}$, on extrait une sous-suite $\left( x_{\phi_0 \circ \ldots \circ \phi_p(n)}^{(p)} \right)$ qui tend vers $\lambda_p \in K_p$.
+
+On a donc une sous-suite de $(x_n)_{n \in \mathbb{N} }\in K^\mathbb{N}$, en sachant que toutes les sous-suites d'une suite convergente convergent vers la même valeur : 
+\[
+    x_{\phi_0 \circ \ldots \circ \phi_p(n)} = \left( x_{\phi_0 \circ \ldots \circ \phi_p(n)}^{(0)} , \ldots, x_{\phi_0 \circ \ldots \circ \phi_p(n)}^{(p)}\right) \underset{n \rightarrow +\infty} {\buildrel d \over \longrightarrow}\left( \lambda_0 , \ldots, \lambda_p\right) \in \prod_{t=0}^p K_t = K
+\]
+
+On a trouvé une sous-suite qui converge vers un limite dans $K$. Donc, pour n'importe quelle distance $d$, $K$ est toujours un ensemble compact.
+
+\noindent \textit{Résolution avec la distance définie}
+
+Avec $d$ définie dans l'énoncé, on veut montrer que, en notant $\psi = \phi_0 \circ \ldots \phi_p$ et $\Lambda = (\lambda_0, \ldots, \lambda_p)$ :
+\[
+    d(x_{\psi(n)}, \Lambda) = \sum_{p=0}^{\infty} \frac{1}{2^p} . \min(1, d_p(x_{\psi(n)}^{(p)}, \lambda_p))\underset{n \rightarrow +\infty} {\buildrel  \over \longrightarrow} 0
+\]
+
+Dans la partie \textit{Résolution générale}, on a déjà parlé de la convergence de $(x_{\psi(n)}^{(p)})_{n \in \mathbb{N}}$ vers $\lambda_p$ pour n'importe quel valeur de  $p$.
+
+En conséquence, pour n'importe quell valeur de $\varepsilon_0$, on peut toujours en déduire les valeurs (dépendant de $\varepsilon_0$) $(N_1, \ldots, N_p)$, lorsque $\psi(n) > N = \max(N_1, \ldots, N_p)$, ici $N$ est un nombre entier fini car tous les  $N_1, \ldots, N_p$ sont finis :
+\[
+    d_p(x_{\psi(n)}^{(p)}, \lambda_p) \leq \varepsilon_0
+\]
+
+Soit $\varepsilon >0$, on prend $\varepsilon_0 = \frac{1}{2} \varepsilon$ et ensuite on obtient le valeur de  $N$ (la méthode est dans la paragraphe au-dessus), lorsque $n> N$, 
+\[
+d(x_{\psi(n)}, \Lambda) \leq \sum_{p=0}^{\infty} \frac{1}{2^p} . \varepsilon_0 = \sum_{p=0}^{\infty} \frac{1}{2^p} \frac{1}{2} \varepsilon < \varepsilon
+\]
+
+Donc, $d(x_{\psi(n)}, \Lambda) \underset{n \rightarrow +\infty} {\buildrel  \over \longrightarrow} 0$.
+
+% ------------------------------------------------------------------------------
+
+\end{document}
