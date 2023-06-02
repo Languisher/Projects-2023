@@ -1,0 +1,666 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{framed}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\colorlet{LightGray}{White!90!Periwinkle}
+\colorlet{LightOrange}{Orange!15}
+\colorlet{LightGreen}{Green!15}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+
+\declaretheoremstyle[name=Théorème,]{thmsty}
+\declaretheorem[style=thmsty,numberwithin=section]{theorem}
+\tcolorboxenvironment{theorem}{colback=LightGray}
+
+\declaretheoremstyle[name=Proposition,]{prosty}
+\declaretheorem[style=prosty,numberlike=theorem]{proposition}
+\tcolorboxenvironment{proposition}{colback=LightOrange}
+
+\declaretheoremstyle[name=Propriété,]{prcpsty}
+\declaretheorem[style=prcpsty,numberlike=theorem]{principle}
+\tcolorboxenvironment{principle}{colback=LightOrange}
+
+\declaretheoremstyle[name=Définition,]{defisty}
+\declaretheorem[style=defisty,numberlike=theorem]{definition}
+\tcolorboxenvironment{definition}{colback=LightGreen}
+
+\setstretch{1.2}
+\geometry{
+    textheight=9in,
+    textwidth=5.5in,
+    top=1in,
+    headheight=12pt,
+    headsep=25pt,
+    footskip=30pt
+}
+
+% ------------------------------------------------------------------------------
+
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% Cover Page and ToC
+% ------------------------------------------------------------------------------
+
+\title{ \normalsize \textsc{}
+        \\ [2.0cm]
+        \HRule{1.5pt} \
+        \LARGE \textbf{\uppercase{Algèbre Linéaire}
+        \HRule{2.0pt} \\ [0.6cm] \LARGE{Projet 2 : Calcul de $A^{-1}$} \vspace*{10\baselineskip}}
+        }
+\date{\today}
+\author{\textbf{Auteurs} \\ 
+        Brenton Ethan}
+\maketitle
+\newpage
+
+\tableofcontents
+
+% ------------------------------------------------------------------------------
+% Body
+% ------------------------------------------------------------------------------
+
+\newpage
+
+% ------------------------------------------------------------------------------
+
+\section{Probabilité d'inversibilité d'une matrice $\mathrm{M} _{10}( [\![0, 5]\!])$}
+
+L'idée principal est de générer des matrices aléatoires de taille $10 \times 10$ avec des valeurs entre 0 et 5. Ensuite, on vérifie si le déterminant de la matrice est non-nul. Si oui, on incrémente le compteur. On répète cette procédure 10000 fois.
+
+
+Cette partie va prendre beaucoup de temps, approximativement 80s.
+
+\begin{lstlisting}
+A = sp.Matrix(randint(0, 6, size=(10, 10))) # On prendre des valeurs entre 0 et 5, de taille 10 x 10
+
+time_init = time.time()
+MAX_FOIS = 10000
+count = 0 
+
+for fois in range(MAX_FOIS+1):
+    A = sp.Matrix(randint(0, 5, size=(10, 10)))
+    if A.det() != 0:
+        count += 1
+        
+    time_end = time.time()
+    
+    if fois % 1000 == 0:
+        print(f"Temps: {time_end - time_init}s, on a {count} matrices inversibles sur {fois+1}")
+\end{lstlisting}
+
+Cette partie de code nous donne le résultat suivant :
+
+\begin{lstlisting}
+Temps: 79.15702891349792s, on a 10001 matrices inversibles sur 10001
+\end{lstlisting}
+
+En général, presque toutes les matrices sont inversibles. On peut donc conclure statistiquement que : 
+
+\begin{tcolorbox}[title={Inversibilité d'une matrice de $\mathrm{M} _{10}([\![0, 5]\!])$}, fonttitle = \bfseries \sffamily]
+    La probabilité d'inversibilité d'une matrice $\mathrm{M} _{10}( [\![0, 5]\!])$ est très proche de 1.
+\end{tcolorbox}
+\newpage
+
+\section{Comparaison de 4 méthodes pour calculer l'inverse d'une matrice}
+
+\subsection{Utilisation de la formule}
+
+\[
+A^{-1} =  \frac{1}{\det(A)} \cdot ^t \text{Com}(A)
+\]
+
+\begin{tcolorbox}
+        Globalement, dans tous les questions, on définit $C$ le nombre d'opérations totales, initialement $C=0$. Spécialement, $C$ est le nombre maximale d'opérations.
+\end{tcolorbox}
+
+On va disiver cette question en deux parties : calculation de $\det(A)$ et calculation de $^t \text{Com}(A)$.
+
+\subsubsection{Calculation du $\det(A)$} \label{1}
+
+Dans cette partie, on utilise la \textit{\bf{Méthode de Gauss}} qui peut transform $A$ en une matrice triangulaire, ensuite multiplie les éléments sur le diagonal.
+
+\noindent\textit{Méthode de Gauss}
+
+Nous allons procéder ligne par ligne, en vérifiant d'abord si le pivot est 0, puis en traitant les autres lignes ensuite. On répète ce processus pour chaque ligne. Donc, pour chaque ligne $i \in [\![1, 10]\!]$, on fait :
+\begin{itemize}
+    \item On vérifie si le pivot $a_{i, i}$ est 0. \\
+        Si oui, on échange la ligne avec une autre ligne qui a un élément non-nul dans la même colonne. On fait la même chose pour les autres lignes.
+        \begin{tcolorbox}
+            Lorsque on échange deux lignes, le signe du déterminant change. Il faut donc compter le nombre de changement de signe.
+
+            Le maximum de changement de signe est $9$ fois. (Lorsque le premier ligne est $[0, 0, 0, 0, 0, 0, 0, 0, 0, N]$ et en même temps la matrice est inversible, il doit être tombé de la ligne $1$ à la ligne $10$, où $N$ est un nombre entier $\in [\![1,5]\!]$)
+            \[
+                C := C + \underbrace{9}_{\text{changement de signe}}
+            \]
+            
+        \end{tcolorbox}
+    \item On est assuré que $a_{i, i} \ne 0$. Donc, en conservant le pivot de la ligne $i$, on calcul le valeur $R_j = a_{j,i}/a_{i,i}$ pour tout $a_{j, i},\; j \in [\![i+1, 10]\!]$. \[
+    C := C + (10-i)
+    \]
+    
+    \item On multiplie chaque ligne par $R_j$. Pour tout $a_{j, k},\; j \in [\![i+1, 10]\!],\; k \in [\![1, 10]\!]$, on fait $a_{j, k} = a_{j, k} - R_j \cdot a_{i, k}$. \[
+    C := C + 2 \times  (10 - i) \times  (11 -i)
+    \]
+\end{itemize}
+
+\noindent\textit{Multiplication des éléments}
+
+Enfin, on multiplie tous les éléments de la diagonale de la matrice triangulaire. \[
+C := C + 9
+\]
+\begin{tcolorbox}
+Dans cette partie, le nombre d'opération est donc :
+\begin{align*}
+    C &:= C + \sum_{i=1}^{10} \left( (10-i) + 2 \times  (10 - i) \times  (11 -i) \right) + 9 + \underbrace{9}_{\text{changement de signe}} \\
+      &:= C + 714 + \underbrace{9}_{\text{changement de signe}}
+\end{align*}
+    
+\end{tcolorbox}
+
+\begin{lstlisting}
+sum = 0
+for i in range(1, 11):
+    sum += (10-i) + 2 * (10-i) * (11-i)
+
+print(sum)
+\end{lstlisting}
+
+Le résultat est :
+\begin{lstlisting}
+705
+\end{lstlisting}
+
+% ------------------------------------------------------------------------------
+
+\subsubsection{Calculation de $^t \text{Com}(A)$}
+
+On utilise la formule suivante pour calculer $^t \text{Com}(A)$ :
+\[
+\text{Com}(A) = \begin{pmatrix}
+    C_{1, 1} & C_{1, 2} & \cdots & C_{1, 10} \\
+    C_{2, 1} & C_{2, 2} & \cdots & C_{2, 10} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    C_{10, 1} & C_{10, 2} & \cdots & C_{10, 10}
+\end{pmatrix}
+\]
+
+Où $C_{i, j}$ est le cofacteur de $a_{i, j}$, qui est égal à $(-1)^{i+j} \cdot \det(A_{i, j})$. En total il y a $10 \times 10 = 100$ matrices de taille $9 \times 9$. Donc, 
+\[
+C := C + 2
+\]
+
+Le nombre d'opération peut être exprimée comme :
+
+\begin{tcolorbox}
+    Dans cette partie, le nombre d'opération est :
+    \begin{align*}
+        C &:= C + 100 \times \left( \sum_{i=1}^{9} ((9-i) + 2 \times  (9 - i) \times  (10 -i))+ 8 + 2+ \underbrace{8}_{\text{changement de signe}}\right)  \\
+          &:= C + 52600 + \underbrace{800}_{\text{changement de signe}}
+    \end{align*}
+\end{tcolorbox}
+
+\begin{lstlisting}
+sum = 0
+for i in range(1, 10):
+    sum = sum + (9-i) + 2 * (9-i) * (10-i)
+
+sum += 10
+sum
+\end{lstlisting}
+
+Le résultat est :
+\begin{lstlisting}
+526
+\end{lstlisting}
+
+\subsubsection{Division par $\det(A)$}
+
+Rappelons que on doit diviser chaque élément dans la transposée de la matrice des cofacteurs par $\det(A)$ :
+
+\begin{tcolorbox}
+    On doit ajouter $100$ opérations pour la division.
+\[
+C := C + 10 \times 10 = C + 100
+\]
+\end{tcolorbox}
+
+\subsubsection{Conclusion}
+
+\begin{tcolorbox}[title={Conclusion}, fonttitle = \bfseries \sffamily]
+    Le nombre d'opération total est donc :
+    \begin{align*}
+        C &=   
+        \sum_{i=1}^{10} ((10-i)+ 2 \times (10-i)\times (11-i)) + 9 + \underbrace{9}_{\text{changement de signe}} \\ &\quad+ 100 \times  \left(\sum_{i=1}^{9} ((9-i) + 2 \times  (9 - i) \times  (10 -i)) + 8+2\right)+ \underbrace{800}_{\text{changement de signe}}\\
+        &\quad+ 100 \\
+          &= 53414 + \underbrace{809}_{\text{changement de signe}} \\
+    \end{align*}
+\end{tcolorbox}
+
+\newpage
+
+\subsection{Résolution par l'algorithme de Gauss}
+
+\subsubsection{Augmentation de la matrice}
+
+Dans la \textbf{Méthode de Gauss}, on fera des opérations sur la matrice augmentée suivante:\\
+
+\[
+    \begin{pmatrix}  
+\begin{array}{cccc|cccc}
+a_{1,1} & a_{1,2} & ... & a_{1,10} & 1 &0&... &0\\
+a_{2,1} & a_{2,2} & ... & a_{2,10} & 0 &1 & ...&0\\
+\vdots & \vdots & & \vdots & \vdots &\vdots & &\vdots\\
+a_{10,1} & a_{10,2} & ... & a_{10,10} & 0& 0&... & 1\\
+\end{array}\end{pmatrix} 
+\]
+
+On a besoin de transformer la partie gauche en une matrice unitée.
+
+\subsubsection{Transformation des parties}\label{2}
+\begin{tcolorbox}
+    \textit{ PARTIE A : Le nombre d'opération pour la matrice de la partie gauche.}\label{2A}
+\end{tcolorbox}
+\begin{itemize}
+    \item Premièrement, on transforme la partie gauche en une matrix triangulaire supérieure utilisant la méthode de Gauss.\\ On a vu dans la partie \ref{1}, pour une $10 \times 10$ matrice, on pourra faire au plus 
+
+        \begin{tcolorbox}
+            (On ne compte pas la signe ici, car on ne utilisera pas cette fonction pour calculer le déterminant)
+        \[
+            C := C + \sum_{i=1}^{10} [(10-i) + 2 \times  (10-i) \times (11-i)]   = C + 705
+        \]
+        \end{tcolorbox}
+        
+       \end{itemize}
+
+\begin{tcolorbox}
+    \textit{PARTIE B : Le nombre d'opération pour la matrice de la partie droite. On note la partie droite comme} \label{2B}
+\[
+\begin{pmatrix}
+    1 & 0 & \cdots & 0 \\
+    0 & 1 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 1
+\end{pmatrix} = 
+\begin{pmatrix}
+    b_{1,1} & b_{1,2} & \ldots & b_{1, 10} \\
+    b_{2,1} & b_{2,2} & \ldots & b_{2, 10} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    b_{10,1} & b_{10,2} & \ldots & b_{10, 10}
+\end{pmatrix}
+\]
+
+\end{tcolorbox}
+
+On prend l'exemple suivant pour expliquer la transformation de la partie droite : Supposons que l'on a fait la transformation $L_i \leftarrow L_i - L_1 \times R_i$ pour tous les $i$ lignes.
+\begin{itemize}
+    \item Pour la première \textit{colonne à droite},  il deviendra :
+\[
+\begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix} \implies
+\begin{bmatrix}
+ 1\\
+ 0-1\times\frac{a_{2,1}}{a_{1,1}} \\
+ \vdots\\
+ 0-1\times\frac{a_{10,1}}{a_{1,1}}
+\end{bmatrix}=
+\begin{bmatrix}
+ 1\\
+ -\frac{a_{2,1}}{a_{1,1}} \\
+ \vdots\\
+-\frac{a_{10,1}}{a_{1,1}}
+\end{bmatrix}=
+\begin{bmatrix}
+b_{1,1}\\
+b_{2,1}\\
+\vdots\\
+b_{10,1}
+\end{bmatrix}
+\]
+
+Alors, \[
+C := C + 9 \times 2 = C + 18
+\]
+
+Pour la deuxième \textit{colonne à droite}, on fait la même chose, mais on a besoin de faire une opération supplémentaire, c'est-à-dire, pour chaque ligne $i \in [\![3, n]\!]$, on fait une opération $L_i \rightarrow L_i - L_2 \times R_i$, il deviendra :
+
+\[
+\begin{bmatrix} 0 \\ 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}  \implies
+\begin{bmatrix}
+ 0\\
+ 1\\
+ 0-1\times\frac{a_{3,2}}{a_{2,2}} \\
+ \vdots\\
+ 0-1\times\frac{a_{10,2}}{a_{2,2}}
+\end{bmatrix}=
+\begin{bmatrix}
+ 0\\
+ 1\\
+ -\frac{a_{3,2}}{a_{2,2}} \\
+ \vdots\\
+-\frac{a_{10,2}}{a_{2,2}}
+\end{bmatrix}=
+\begin{bmatrix}
+b_{1,2}\\
+b_{2,2}\\
+b_{3,2}\\
+\vdots\\
+b_{10,2}
+\end{bmatrix}
+\]
+
+Alors, \[
+C := C + 8 \times 2 = C + 16
+\]
+
+\item En résumé, quand on fait une transformation à la première ligne de la matrice à gauche, le nombre d'opération s'écrit comme :
+    \[
+    C := C + \sum_{i=1}^{10} (10-i) \times  2
+    \]
+\item Cela implique, lorsque l'on a fini la transformation du triangulaire supérièure à la matrice à gauche, en totale, le nombre d'opération vaut :
+    \begin{tcolorbox}
+    \begin{align*}
+        C &:= C + \sum_{i=1}^{10} (10-i) \times  2 + \sum_{i=1}^{9} (9-i) \times  2 + \ldots + 2 \\
+          &:= C + \sum_{n=1}^{10} \sum_{i=1}^{n} 2 \times (n-i) = C + 330
+    \end{align*}
+        
+    \end{tcolorbox}
+
+\begin{lstlisting}
+count = 0
+for n in range(1, 10+1):
+    for i in range(1, n+1):
+        count += 2*(n-i)
+count # Résultat : 330
+\end{lstlisting}
+
+\end{itemize}
+
+Enfin, on obtient la matrice augmentée suivante :
+\[
+\begin{pmatrix}
+\begin{array}{cccc|cccc}
+a_{1,1} & a_{1,2} & ... & a_{1,10} & b_{1,1} &0&... &0\\
+0 & a_{2,2} & ... & a_{2,10} & b_{2,1} &b_{2,2} & ...&0\\
+\vdots & \vdots & & \vdots & \vdots &\vdots & &\vdots\\
+0 & 0 & ... & a_{10,10} & b_{10,1}& b_{10,2}&... & b_{10,10}\\
+\end{array}
+\end{pmatrix}
+\]
+
+\subsubsection{Transformation de la partie gauche en une matrice d'identité}
+
+\begin{itemize}
+    \item On souhaite de transformer la matrice à la gauche d'une matrice triangulaire supérieure diagonale à une matrice diagonale. C'est l'inverse de ce que l'on a fait dans la partie $B$ pour la matrice de la partie droite, voir \ref{2B}.  
+        \[
+            \begin{pmatrix} a_{1,1} & a_{1,2}& \ldots & a_{1, 10}\\
+                0 & a_{2,2} & \ldots & a_{2, 10}\\
+                \vdots & \vdots & & \vdots\\
+                0 & 0 & \ldots & a_{10, 10}
+            \end{pmatrix} \implies \begin{pmatrix} 
+                a'_{1, 1} & 0 & \ldots & 0 \\
+                0 & a'_{2, 2} & \ldots & 0 \\
+                \vdots & \vdots & & \vdots\\
+                0 & 0 & \ldots & a'_{10, 10}
+            \end{pmatrix} 
+        \]
+            
+        \begin{tcolorbox}
+        \[
+        C := C +  \sum_{n=1}^{10} \sum_{i=1}^{n} 2(n-i) = C + 330
+        \]
+        \end{tcolorbox}
+        
+    \item Puis, on va calculer les opérations fait pour la matrice à la droite. Chaque élément $b_{i,j} \leftarrow b_{i,j} - b_{10,j} \times R_i$. Cette méthode est la réverse de la \textbf{Méthode de Gauss}, cette fois-ci, on a transformé une matrice triangulaire inférieur en une matrice de taille $10 \times 10$. On obtient immédiatement : 
+
+        \[
+            \begin{pmatrix} b_{1,1} & 0 & \ldots & 0 \\
+                b_{2,1} & b_{2,2} & \ldots & 0 \\
+                \vdots & \vdots & & \vdots\\
+                b_{10,1} & b_{10,2} & \ldots & b_{10,10}
+            \end{pmatrix} \implies 
+            \begin{pmatrix} 
+                b'_{1,1} & b'_{1,2} & \ldots & b'_{1, 10}\\
+                b'_{2,1} & b'_{2,2} & \ldots & b'_{2, 10}\\
+                \vdots & \vdots & & \vdots\\
+                b'_{10,1} & b'_{10, 2} & \ldots & b'_{10, 10}
+            \end{pmatrix} 
+        \]
+        
+        \begin{tcolorbox}
+        \[
+        C := C + \sum_{i=1}^{10} ((10-i) + 2 \times  (10-i) \times  (11-i)) = C + 705
+    \]
+        \end{tcolorbox}
+        
+    \item Finalement, on divise la matrice de la droite par la matrice de la gauche, c'est-à-dire : $$L_i \leftarrow L_i / a_{i,i}, \; \forall i \in [\![1, 10]\!]$$
+        
+        \begin{tcolorbox}
+        \[
+        C := C + 10 \times 10 = C + 100
+        \]
+        \end{tcolorbox}
+        
+
+\end{itemize}
+
+\subsubsection{Conclusion}
+
+En sommant les 3 parties, 
+
+\begin{tcolorbox}[title={Conclusion}, fonttitle = \bfseries \sffamily]
+    Le nombre d'opération total est donc :
+    \[
+    C = 705 + 330  + 705 + 330 + 100 = 2170
+    \]
+    
+\end{tcolorbox}
+
+\newpage
+
+\subsection{Triangulaire}\label{3}
+
+\newpage
+
+\subsection{Décomposition QR}
+
+
+
+
+D'après la proposition en cours, en vérifiant l'inversibilité de la matrice $A$, il existe un unique couple $(O, T) \in \mathrm{O} _p(\mathbb{R} ) \times  \mathrm{T} _p^+ (\mathbb{R})$, $T$ ayant tous ses termes diagonaux $>0$, telles que \[
+A = O.T
+\]
+
+\subsubsection{Décomposition en dix systèmes linéaires}
+
+L'idée principale est la même de la partie \ref{3} : 
+\begin{align*}
+    &\quad\quad  A.B = I_n \text{ avec } B = A^{-1}  \\
+    &\iff  A. \begin{bmatrix} \vdots & \vdots & \ldots & \vdots \\ B_1 & B_2 & \ddots & B_{10} \\ \vdots & \vdots & \ldots & \vdots \end{bmatrix}  = \begin{bmatrix} 1 & 0 & \ldots & 0 \\ 0 & 1 & \ldots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \ldots & 1\end{bmatrix} \\
+    &\iff        A.\begin{bmatrix} \vdots \\ B_1 \\ \vdots\end{bmatrix}  = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0  \end{bmatrix}, \;
+        A.\begin{bmatrix} \vdots \\ B_2 \\ \vdots \end{bmatrix}  = \begin{bmatrix} 0 \\ 1 \\ \vdots \\ 0 \end{bmatrix}, \; \ldots, \;
+        A.\begin{bmatrix} \vdots \\ B_{10} \\ \vdots \end{bmatrix}  = \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 1 \end{bmatrix} \\
+    &\iff A.X_1 = \begin{bmatrix} 1 \\ 0\\ \vdots \\ 0 \end{bmatrix},\; \ldots,\; A.X_{10} = \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 1 \end{bmatrix} 
+\end{align*}
+Donc, on doit résoudre 10 système d'inconnue en totale. 
+\begin{tcolorbox}
+\[
+    C := C_{(S)} \times  10
+\]
+ 
+Ici, $C_{(S)}$ représente la nombre d'opération pour chaque système $(S)$.
+\end{tcolorbox}
+
+\subsubsection{Méthode de Gram-Schmidt}
+
+C'est un procéde qui transforme un système de $n$ vecteurs en un système orthonormé en faisant respectivement des projections sur les axes. On note : $\mathcal{A} = (a_1, \ldots, a_{10}) \implies \mathcal{E} = (e_1, \ldots, e_{10})$
+\[
+    A = \begin{bmatrix} \vdots & \vdots & & \vdots \\ 
+    a_1 & a_2 & \ldots & a_{10} \\
+    \vdots & \vdots & & \vdots \end{bmatrix}
+\]
+
+
+On rappelle que la fonction de projection d'un vecteur $v \in E$ sur un autre vectueur  $u \in E$ est définie comme :
+\[
+p_u : v \mapsto \frac{<u, v>}{ \mid  \mid u  \mid  \mid ^2}  u
+\]
+
+
+On procéde selon les formules :
+\begin{align*}
+    b_1 &= a_1, \;e_1 = \frac{b_1}{  \mid  \mid b_1  \mid  \mid }   \\
+    b_2 &= a_2 - p_{e_1}(a_2),\;  e_2 =  \frac{b_2}{ \mid  \mid b_2 \mid  \mid }  \\
+    b_3 &= a_3 - p_{e_1}(a_3) - p_{e_2}(a_3),\; e_3 = \frac{b_3}{ \mid  \mid b_3 \mid  \mid }   \\
+    \vdots \\
+    b_{10} &= a_{10} - \sum_{n=1}^{9} p_{e_n}(a_{10}), \;e_{10} = \frac{b_{10}}{ \mid  \mid b_{10} \mid  \mid } 
+\end{align*}
+
+En résumé, en assurant que la norme de $u$ vaut $1$ dans chaque orthomalisation :
+\begin{tcolorbox}[title={Process de l'orthomalisation de Gram-Schmidt}, fonttitle = \bfseries \sffamily]
+    Les choses à faire pour chaque vecteur $b_i$ :
+\begin{align*}
+    b_1 &= a_1, \;e_1 = \frac{b_1}{  \mid  \mid b_1  \mid  \mid }   \\
+    b_2 &= a_2 - <a_2, e_1>.e_1,\;  e_2 :=  \frac{b_2}{ \mid  \mid b_2 \mid  \mid }  \\
+    b_3 &= a_3 - <a_3, e_1>.e_1 - <a_3, e_2>.e_2,\; e_3 := \frac{b_3}{ \mid  \mid b_3 \mid  \mid }   \\
+    \vdots \\
+    b_{10} &= a_{10} - \sum_{n=1}^{9} <a_{10}, e_n>.e_n,\;e_{10} := \frac{b_{10}}{ \mid  \mid b_{10} \mid  \mid } 
+\end{align*}
+\end{tcolorbox}
+
+\begin{itemize}
+    \item 
+Pour chaque projection, par étape :
+\begin{itemize}
+    \item $<u,v>$ : multiplication 10 + sommation 9 = 19 opérations
+    \item On multiplie la scalaire pour tous les éléments de $u$ : 10 opérations
+    \item Chaque soustraction vaut 10 opération.
+\end{itemize}
+
+En totale, la nombre d'opération de chaque projection est :
+\[
+C := C + 19 + 10 + 10 = C + 39
+\]
+
+\item
+La normation d'un vecteur, par étape :
+\begin{itemize}
+    \item Calculer la norme : multiplication 10 + sommation 9 + $\sqrt{.}$ 1 = 20 opérations  \[
+    \mid  \mid u  \mid  \mid = \sqrt{<u, u>}
+    \]
+    \item Diviser tous les éléments par la norme : 10 opérations
+    
+\end{itemize}
+En totale, la nombre d'opération de chaque normation est :
+\[
+C := C + 20 + 10 = C + 30
+\]
+\end{itemize}
+
+Donc, cette étape demande en totale :
+\begin{tcolorbox}
+    \[
+    C := C + \sum_{n=1}^{9} 39n + 30 \times 10 = C + 2055
+\]
+\end{tcolorbox}
+
+\subsubsection{Construction de l'équation} 
+
+De l'orthomalisation de Gram-Schmidt, on obtient :
+\begin{align*}
+    a_1 &= b_1 =  \mid  \mid b_1  \mid  \mid . e_1 \\
+    a_2 &= b_2 + <a_2.e_1>.e_1 =  \mid   \mid b_2  \mid  \mid .e_2 + <a_2.e_1>.e_1\\
+    \ldots \\
+    a_{10} &= b_{10} + \sum_{n=1}^{9} <a_{10}, e_n>.e_n =  \mid  \mid b_{10}  \mid  \mid .e_{10} + \sum_{n=1}^{9} <a_{10}, e_n>.e_n
+\end{align*}
+
+On peut aisément vérifie que :
+\[
+    A = O.T  = \begin{bmatrix} \vdots & \vdots & & \vdots \\ a_1 & a_2 & \ldots & a_{10} \\ \vdots & \vdots & & \vdots \end{bmatrix} = \begin{bmatrix} \vdots & \vdots & & \vdots \\ e_1 & e_2 & \dots & e_{10} \\ \vdots & \vdots & & \vdots
+    \end{bmatrix}.\begin{bmatrix}  \mid  \mid b_1 \mid  \mid & <a_2, e_1> & <a_3,e_1> &\ldots & <a_{10},e_1> \\ 0 &  \mid  \mid b_2  \mid  \mid  & <a_3, e_2> & \ldots & <a_{10}, e_2> \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots &  \mid \mid  b_{10} \mid  \mid  \end{bmatrix} 
+\]
+On veut résoudre $A.X = B$, et on a l'équation  $A = O.T$. Donc, on a :
+\[
+    O.T.X = B \Leftrightarrow T.X = \;^tO.B
+\]
+
+La multiplication des 2 matrices doit avoir 
+\begin{tcolorbox}
+    \[
+    C := C + 10 \times 10 \times (10 \text{ multiplication} + 9 \text{ sommation}) = C + 1900
+\]
+\end{tcolorbox}
+
+\subsubsection{Résolution d'un système triangulaire}
+
+En notant $\;^tO.B = Y$, on veut résoudre  $T.X = Y$. On a :
+\begin{align*}
+    x_{10} &= \frac{y_{10}}{t_{10,10}} \\
+    x_9 &= \frac{y_9 - t_{9,10}x_{10}}{t_{9,9}} \\
+    \vdots \\
+    x_1 &= \frac{y_1 - \sum_{n=2}^{10} t_{1,n}x_n}{t_{1,1}}
+\end{align*}
+
+Pour chaque étape, on a :
+\begin{itemize}
+    \item Multiplication : $(10-i)$ fois pour la  $i$-ème équation
+    \item Soustraction : $1$ opération
+    \item Calculer la division : 1 opération
+\end{itemize}
+
+Donc, le nombre d'opération pour chaque étape est :
+\begin{tcolorbox}
+    \[
+    C := C + \sum_{n=1}^{10}((n-1) \times 2 + 1) = C + 100
+\]
+\end{tcolorbox}
+
+\subsubsection{Conclusion}
+Le nombre d'opération total est donc :
+
+\begin{tcolorbox}[title={Conclusion}, fonttitle = \bfseries \sffamily]
+    La nombre d'opérations :
+    \[
+    C = (2055 + 1900 + 100) \times 10 = 40550
+\]
+\end{tcolorbox}
+% ------------------------------------------------------------------------------
+
+\newpage
+\section{Conclusion}
+
+\end{document}
