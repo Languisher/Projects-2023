@@ -2,9 +2,14 @@
 
 This repository contains these projects :
 
-- AL0402 : Algèbre Linéaire, Auteurs : **Edward**, Brenton, Simon
-- TO0404 : Topologie, Auteurs : **Simon**, Edward, Brenton
-- IA0507 : Intelligence Artificielle, Auteurs : **Brenton**, Simon, Edward
-- AL0603 : Algèbre Linéaire, Auteurs : **Brenton**, Ethan
-- TO0604 : Topologie, Auteurs :
-- IA0614 : Intelligence Artificielle, Auteurs : **Brenton**, Maxime
+## Algèbre Linéaire
+- AL-0402 : Auteurs : **Edward**, Brenton, Simon
+- AL-0603 : Auteurs : **Brenton**, Ethan
+
+## Topologie
+- TO-0404 : Auteurs : **Simon**, Edward, Brenton
+- TO-0604 : Auteurs : Simon, Brenton, Edward
+
+## Intelligence Artificielle
+- IA0507 : Auteurs : **Brenton**, Simon, Edward
+- IA0614 : Auteurs : **Brenton**, Maxime
