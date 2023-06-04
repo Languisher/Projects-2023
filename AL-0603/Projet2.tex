@@ -151,7 +151,7 @@ A^{-1} =  \frac{1}{\det(A)} \cdot ^t \text{Com}(A)
 
 On va disiver cette question en deux parties : calculation de $\det(A)$ et calculation de $^t \text{Com}(A)$.
 
-\subsubsection{Calculation du $\det(A)$} \label{1}
+\subsubsection{Calculation du $\det(A)$, Méthode de Gauss} \label{1}
 
 Dans cette partie, on utilise la \textit{\bf{Méthode de Gauss}} qui peut transform $A$ en une matrice triangulaire, ensuite multiplie les éléments sur le diagonal.
 
@@ -161,10 +161,12 @@ Nous allons procéder ligne par ligne, en vérifiant d'abord si le pivot est 0, 
 \begin{itemize}
     \item On vérifie si le pivot $a_{i, i}$ est 0. \\
         Si oui, on échange la ligne avec une autre ligne qui a un élément non-nul dans la même colonne. On fait la même chose pour les autres lignes.
-        \begin{tcolorbox}
+        \begin{tcolorbox}[title={Notice}, colback=red!5!white,colframe=red!75!black, fonttitle = \bfseries \sffamily]
             Lorsque on échange deux lignes, le signe du déterminant change. Il faut donc compter le nombre de changement de signe.
 
-            Le maximum de changement de signe est $9$ fois. (Lorsque le premier ligne est $[0, 0, 0, 0, 0, 0, 0, 0, 0, N]$ et en même temps la matrice est inversible, il doit être tombé de la ligne $1$ à la ligne $10$, où $N$ est un nombre entier $\in [\![1,5]\!]$)
+            Le maximum de changement de signe est $9$ fois. Mais, en général, il est plus petit que $9$. Donc, nous le séparons dans nos calculs.
+
+            (Lorsque le premier ligne est $$[0, 0, 0, 0, 0, 0, 0, 0, 0, N]$$ et en même temps la matrice est inversible, il doit être tombé de la ligne $1$ à la ligne $10$, où $N$ est un nombre entier $\in [\![1,5]\!]$)
             \[
                 C := C + \underbrace{9}_{\text{changement de signe}}
             \]
@@ -179,16 +181,11 @@ Nous allons procéder ligne par ligne, en vérifiant d'abord si le pivot est 0, 
     \]
 \end{itemize}
 
-\noindent\textit{Multiplication des éléments}
-
-Enfin, on multiplie tous les éléments de la diagonale de la matrice triangulaire. \[
-C := C + 9
-\]
 \begin{tcolorbox}
 Dans cette partie, le nombre d'opération est donc :
 \begin{align*}
-    C &:= C + \sum_{i=1}^{10} \left( (10-i) + 2 \times  (10 - i) \times  (11 -i) \right) + 9 + \underbrace{9}_{\text{changement de signe}} \\
-      &:= C + 714 + \underbrace{9}_{\text{changement de signe}}
+    C &:= C + \sum_{i=1}^{10} \left( (10-i) + 2 \times  (10 - i) \times  (11 -i) \right) + \underbrace{9}_{\text{changement de signe}} \\
+      &:= C + 705 + \underbrace{9}_{\text{changement de signe}}
 \end{align*}
     
 \end{tcolorbox}
@@ -205,6 +202,16 @@ Le résultat est :
 \begin{lstlisting}
 705
 \end{lstlisting}
+\subsubsection{Calculation du $\det(A)$, Multiplication des éléments} 
+\noindent\textit{Multiplication des éléments}
+
+Enfin, on multiplie tous les éléments de la diagonale de la matrice triangulaire.
+\begin{tcolorbox}
+\[
+C := C + 9
+\]
+    
+\end{tcolorbox}
 
 % ------------------------------------------------------------------------------
 
@@ -375,7 +382,7 @@ Pour la deuxième \textit{colonne à droite}, on fait la même chose, mais on a 
 -\frac{a_{10,2}}{a_{2,2}}
 \end{bmatrix}=
 \begin{bmatrix}
-b_{1,2}\\
+0 \\
 b_{2,2}\\
 b_{3,2}\\
 \vdots\\
@@ -387,7 +394,7 @@ Alors, \[
 C := C + 8 \times 2 = C + 16
 \]
 
-\item En résumé, quand on fait une transformation à la première ligne de la matrice à gauche, le nombre d'opération s'écrit comme :
+\item En résumé, quand on fait une transformation à la première colonne de la matrice à gauche, le nombre d'opération s'écrit comme :
     \[
     C := C + \sum_{i=1}^{10} (10-i) \times  2
     \]
@@ -492,8 +499,244 @@ En sommant les 3 parties,
 
 \newpage
 
-\subsection{Triangulaire}\label{3}
+\subsection{Trigonalisation}\label{3}
 
+On résoud les équations linéaires suivantes :\\
+
+\[
+\begin{pmatrix} a_{1,1} & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10}
+            \end{pmatrix}\cdot\begin{pmatrix} 
+            x_1\\
+            x_2\\
+            \vdots\\
+            x_{10}
+            \end{pmatrix}=I_{10} = \begin{pmatrix} 
+            1\\
+            0\\
+            \vdots\\
+            0
+            \end{pmatrix}, \begin{pmatrix} 
+            0\\
+            1\\
+            \vdots\\
+            0
+            \end{pmatrix}, \cdots \begin{pmatrix} 
+            0\\
+            0\\
+            \vdots\\
+            1
+            \end{pmatrix}
+\]
+
+\subsubsection{Transformation de la matrice à gauche}
+
+Dans cette partie, on fera des opérations sur la matrice comme la méthode précédente (on utilisera encore la méthode de Gauss pour la transformer en une matrix triangulaire supérieure):\\
+
+\[
+            \begin{pmatrix} a_{1,1} & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10}
+            \end{pmatrix} \implies 
+            \begin{pmatrix} 
+                a'_{1,1} & a'_{1,2} & \ldots & a'_{1, 10}\\
+                0 & a'_{2, 2} & \ldots & a'_{2, 10}\\
+                \vdots & \vdots & & \vdots\\
+                0 & 0 & \ldots & a'_{10, 10}
+            \end{pmatrix} 
+        \]
+
+Comme la partie \ref{1}, cela nous prend 705 étaps.
+\begin{tcolorbox}
+        \[
+        C := C + 705
+        \]
+        \end{tcolorbox}
+        \subsubsection{Transformation de la matrice à droite}
+\begin{itemize}
+    \item On rappel que on va transformer la partie droite de la première équation: 
+    \[\begin{pmatrix} a_{1,1} & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10}
+            \end{pmatrix}\cdot\begin{pmatrix} 
+            x_1\\
+            x_2\\
+            \vdots\\
+            x_{10}
+            \end{pmatrix}=\begin{pmatrix} 
+            1\\
+            0\\
+            \vdots\\
+            0
+            \end{pmatrix}
+    \]
+
+On a vu dans la partie \ref{2} que quand on fait une transformation à la première colonne de la matrice, 
+\[\begin{pmatrix} 
+            1\\
+            0\\
+            \vdots\\
+            0
+            \end{pmatrix} \implies \begin{pmatrix}
+ 1\\
+ 0-1\times\frac{a_{2,1}}{a_{1,1}} \\
+ \vdots\\
+ 0-1\times\frac{a_{10,1}}{a_{1,1}}
+\end{pmatrix}=
+\begin{pmatrix}
+ 1\\
+ -\frac{a_{2,1}}{a_{1,1}} \\
+ \vdots\\
+-\frac{a_{10,1}}{a_{1,1}}
+\end{pmatrix}
+\]
+
+Il y aura $2\times9=18$ opération.\\
+Lorsque on fait des transformations aux autre colonnes de la matrice, il ya aura $\sum_{n=1}^{8} 2n=72$ opérations.\\
+Donc en transformant la partie droite, on fera $\sum_{n=1}^{9} 2n=90$ opérations en totale.
+\[
+        C := C + \sum_{n=1}^{9}2n = C + 90
+        \]
+
+On obtient 
+\[\begin{pmatrix}
+b_{1,1}\\
+b_{2,1}\\
+\vdots\\
+b_{10,1}
+\end{pmatrix}\]\\
+En suite, on résoud l'équation: 
+\[\begin{pmatrix} 
+                a_{1,1} & a_{1,2} & \ldots & a_{1, 10}\\
+                0 & a_{2, 2} & \ldots & a_{2, 10}\\
+                \vdots & \vdots & & \vdots\\
+                0 & 0 & \ldots & a_{10,10}
+            \end{pmatrix}\cdot\begin{pmatrix} 
+            x_1\\
+            x_2\\
+            \vdots\\
+            x_{10}\end{pmatrix}=\begin{pmatrix}
+b_{1}\\
+b_{2}\\
+\vdots\\
+b_{10}
+\end{pmatrix}\].\\
+Donc, on a ：
+
+\begin{align*}
+    x_{10} &= \frac{b_{10}}{a_{10,10}} \\
+    x_9 &= \frac{b_9 - a_{9,10}b_{10}}{t_{9,9}} \\
+    \vdots \\
+    x_1 &= \frac{b_1 - \sum_{n=2}^{10} a_{1,n}x_n}{a_{1,1}}
+\end{align*}
+
+        \[
+        C := C + \sum_{n=1}^{10}2n-1 = C + 100
+        \]
+
+Donc pour la première équation, on a :
+\begin{tcolorbox}
+        \[
+        C := C + \sum_{n=1}^{9}(2n) + \sum_{n=1}^{10}(2n-1) = C+90+100=C+190
+        \]
+\end{tcolorbox}
+    \item Ensuite, on transforme la partie droite de la deuxième équation : $$\begin{pmatrix} a_{1,1} & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10}
+            \end{pmatrix}\cdot\begin{pmatrix} 
+            x_1\\
+            x_2\\
+            \vdots\\
+            x_{10}
+            \end{pmatrix}=\begin{pmatrix} 
+            0\\
+            1\\
+            \vdots\\
+            0
+            \end{pmatrix}
+    $$\\
+    
+Comme l'élément de la premire ligne de $\begin{pmatrix} 
+            0\\
+            1\\
+            \vdots\\
+            0
+            \end{pmatrix}$ est toujours 0 dans la processus des opérations, alors on doit faire seulement $\sum_{n=1}^{9}2n=72$ opérations. De plus, pour résoudre cette équation, on prendra encore 100 étaps comme la cas précédent.\\
+Donc \begin{tcolorbox}
+        \[
+        C := C +72+100 = C+172
+        \]
+        \end{tcolorbox}
+    \item Similairement, on peut résoudre les autre 8 équations.\\
+    \end{itemize}
+
+\subsubsection{Conclusion}
+En totale, on a :
+
+
+\begin{tcolorbox}[title={Conclusion}, fonttitle = \bfseries \sffamily]
+    La nombre d'opérations :
+        \[
+        C := C + 705+100\times10+\sum_{n=1}^{10}n(n-1)\\ = C + 2080
+        \]
+\end{tcolorbox}
+pour résoudre chaque équation.\\
+
+Ici, $\sum_{m=1}^{n}2m=n(n-1)$, en effet, chaque solution est une colonne de la matrix $A^{-1}$.
+
+
+\subsubsection{Autre méthode de trigonalisation}
+
+La trigonalisation d'une matrice de taille $10 \times 10$, strictement dite, doit être faite par les étapes suivantes :
+\begin{itemize}
+    \item On fait la transformation pour $A$ :
+        \[
+            \begin{pmatrix} a_{1,1} & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10}
+            \end{pmatrix} \implies 
+            \begin{pmatrix} a_{1, 1} -\lambda & a_{1,2} & \ldots & a_{1,10} \\
+                a_{2,1} & a_{2,2} -\lambda & \ldots & a_{2,10} \\
+                \vdots & \vdots & & \vdots\\
+                a_{10,1} & a_{10,2} & \ldots & a_{10,10} -\lambda
+            \end{pmatrix} 
+        \]
+    \item Par récurrence, à partir de la matrice de taille $2\times 2$, on utilise la formule :
+        \[
+            \det(A) = \sum_{i=1}^n a_{i,j} \text{Cofacteur}_{i,j}(A)
+        \]
+        
+        pour calculer le déterminant de la matrice $A-\lambda I_n$. Nous trouverons une expression en fonction de $\lambda$ et de degré  $10$.
+
+    \item On trouve un des racines de l'équation caractéristique, et on obtient les valeurs propres de la matrice $A$. Mais, ce n'est pas facile de trouver une valeur exacte d'une polynome de degré $10$, mais on peut trouver les solutions très proche de leur valeurs réels, en utilisant les méthodes par exemple la Bissection.
+
+        On note ce valeur propre $\lambda_1$.
+    \item  On procède par récurrence, on fera la même chose pour la matrice $B$ :
+        \[
+            Q^{-1}A Q = \begin{pmatrix} \lambda_1 & * & \ldots & * \\
+                0 & & \\
+                \vdots & & B 
+            \end{pmatrix}
+        \]
+        
+    \item À la fin, on trouve la matrice $P$ telle que $A = P^{-1}TP$.
+    \item On résoud l'équation : $AX = B \implies P^{-1}TPX =B$
+\end{itemize}
+
+Mais, cette méthode existe deux problèmes majeurs :
+\begin{enumerate}
+    \item Il demande trop de calcul. En effet, pour calculer le déterminant de la matrice $A-\lambda I_n$ en considérant $\lambda$, on monte d'une matrice de taille $2 \times 2$ jusqu'à $9 \times 9$. On ne sait pas combien de fois que l'on trouve un valeur presque exacte lorsque on est en train de trouver une racine de l'équation caractéristique de degré $10$.
+
+    \item Ce n'est pas possible de calculer $P^{-1}$. Notre but est de trouver l'inverse d'une matrice de taille  $10 \times 10$, il est en conflit avec ce que l'on souhaite à faire.
+
+Alors, on n'utilise pas cette méthode.
+\end{enumerate}
 \newpage
 
 \subsection{Décomposition QR}
@@ -664,3 +907,4 @@ Le nombre d'opération total est donc :
 \section{Conclusion}
 
 \end{document}
+

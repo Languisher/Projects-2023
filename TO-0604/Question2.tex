@@ -1,0 +1,300 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{float}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{framed}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+
+\colorlet{LightGray}{White!90!Periwinkle}
+\colorlet{LightOrange}{Orange!15}
+\colorlet{LightGreen}{Green!15}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+
+\declaretheoremstyle[name=Théorème,]{thmsty}
+\declaretheorem[style=thmsty,numberwithin=section]{theorem}
+\tcolorboxenvironment{theorem}{colback=LightGray}
+
+\declaretheoremstyle[name=Proposition,]{prosty}
+\declaretheorem[style=prosty,numberlike=theorem]{proposition}
+\tcolorboxenvironment{proposition}{colback=LightOrange}
+
+\declaretheoremstyle[name=Propriété,]{prcpsty}
+\declaretheorem[style=prcpsty,numberlike=theorem]{principle}
+\tcolorboxenvironment{principle}{colback=LightOrange}
+
+\declaretheoremstyle[name=Définition,]{defisty}
+\declaretheorem[style=defisty,numberlike=theorem]{definition}
+\tcolorboxenvironment{definition}{colback=LightGreen}
+
+\setstretch{1.2}
+\geometry{
+    textheight=9in,
+    textwidth=5.5in,
+    top=1in,
+    headheight=12pt,
+    headsep=25pt,
+    footskip=30pt
+}
+
+% ------------------------------------------------------------------------------
+
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% Cover Page and ToC
+% ------------------------------------------------------------------------------
+
+\title{ \normalsize \textsc{}
+        \\ [2.0cm]
+        \HRule{1.5pt} \
+        \LARGE \textbf{\uppercase{Topologie}
+        \HRule{2.0pt} \\ [0.6cm] \LARGE{Projet 2} \vspace*{10\baselineskip}}
+        }
+\date{\today}
+\author{\textbf{Auteurs} \\
+        Simon Brenton Edward}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+% ------------------------------------------------------------------------------
+\section{Exercice 1}
+
+\begin{enumerate}
+    \item Non, il n'est pas toujours vrai. 
+
+        Si on prend $E=R$, muni de la norme $||\cdot||_{1}$, et $X = ]-1, 1]$, et $Y = [2,+\infty[$, alors $d_{H}(X,Y)$ tend vers l'infini.
+\par
+On le montre par l'absurde:
+\par
+Supposons que $ \mathop{sup}\limits_{x\in X} d(x,Y) = d_{1}$, alors on prend $x_{1} = 2+d_{1}$, alors $d(x_{1},Y)$ sera plus grand que $d_{1}$, absurde !
+\par
+On peut donc conclure que la Disance de Hausdorff, qui est égale à
+
+$$max\{\mathop{sup}\limits_{y\in Y} d(y,X),\mathop{sup}\limits_{x\in X} d(x,Y)\}$$ est encore plus grande que $ \mathop{sup}\limits_{x\in X} d(x,Y)$, donc tend vers $+\infty$.
+
+\item Non.
+
+    Si on prend le même espace $E$ muni de la même distance qu'avant, et prenons $X = Q$ , $Y = R\backslash Q$, donc: $${\forall}x \in X, {\forall}y \in Y, d(x,Y) =d(y,X)=0$$
+    
+On en déduit: $$d_{H}(X,Y) = max\{\mathop{sup}\limits_{y\in Y} d(y,X),\mathop{sup}\limits_{x\in X} d(x,Y)\} = 0 $$
+mais $X\neq Y$. 
+
+\item Oui.
+
+Si la distance bien existe. C'est parce que:
+\begin{equation}
+\begin{aligned}
+d_{H}(Y,X) &= max\{\mathop{sup}\limits_{y\in Y} d(y,X),\mathop{sup}\limits_{x\in X} d(x,Y)\}\\
+&=  max\{\mathop{sup}\limits_{x\in X} d(x,Y),\mathop{sup}\limits_{y\in Y} d(y,X)\}\\
+&= d_{H}(X,Y)
+\end{aligned}
+\end{equation}
+
+\item On procède par l'étapes suivantes :
+\begin{tcolorbox}
+Première propriété:
+$$
+\forall (X, Y) \in E^{2}, X, Y compacts, d_{H}(X,Y) \geq 0
+$$
+\end{tcolorbox}
+\textit{\textbf{Démonstration:}}
+\par
+Car $d_{H}(X,Y) = max\{\mathop{sup}\limits_{y\in Y} d(y,X),\mathop{sup}\limits_{x\in X} d(x,Y)\}$, on peut déduire que $d_{H}(X,Y) \geq \mathop{sup}\limits_{x\in X}d(x,Y)$, qui est bien supérieure ou égale à 0, comme $d$ est une distance bien définie dans $E$.
+\par
+\vspace{1em}
+\begin{tcolorbox}
+Deuxième propriété:
+$$d_{H}(X,Y) = 0 \iff X = Y$$
+\end{tcolorbox}
+\par
+\textit{\textbf{Démonstration:}}
+\par
+- \textit{Sens direct:}
+\par
+Supposons que $d_H(X,Y) = 0$, alors  $max\{\mathop{sup}\limits_{y\in Y} d(y,X),\mathop{sup}\limits_{x\in X} d(x,Y)\} = 0$, et car les distance sont toujours supérieures ou égale à 0, on peut dire que:
+$${\forall}x \in X, {\forall}y \in Y, d(x,Y) =d(y,X)=0$$
+Par l'absurde, supposons que $X \neq Y$, alors il existe $x_{0}$ tel que $x_{0}\in X$, mais $x_{0}\notin Y$, tel que $d(x_{0},Y) = 0$.
+\par
+Car $X,Y$ sont tous compacts, on aura qu'il existe bien $y_{0}\in Y$ tel que $d(x_{0},y_{0} = 0$, et d'après la propriété de distance, on a $x_{0} = y_{0}$, donc $x_{0} \in Y$, absurde!
+\par
+- \textit{Sens indirect:}
+Supposons que $X=Y$, alors $${\forall}x \in X, d(x,Y) =d(x,X)=0$$
+on peut déduire que $d_H(X,Y) = 0$
+\par
+\vspace{1em}
+\begin{tcolorbox}
+Troisième propriété:
+$$
+\forall (X,Y) \in E^{2}, X,Y \text{ compacts}, d_{H}(X,Y) =d_{H}(X,Y)
+$$
+\end{tcolorbox}
+
+\textit{\textbf{Démonstration:}}
+\par
+
+
+C'est vrai parce que l'on a déjà montré dans la question 3 que, c'est vrai pour tous $(X,Y) \in \mathcal{P} (E)^2$, qui est une situation plus générale.
+\vspace{1em}
+\begin{tcolorbox}
+Quatrième propriété:
+
+$$\forall (X,Y,Z) \in E^{3}, X,Y,Z \text{ compacts}, d_{H}(X,Y)+d_{H}(Y,Z) \geq d_{H}(X,Z)
+$$
+\end{tcolorbox}
+\textit{\textbf{Démonstration:}}
+\par
+On sait que:
+\begin{align*}
+ &\quad\quad d_{H}(X,Y)+d_{H}(Y,Z) \\
+ &= \max\{\mathop{sup}\limits_{y\in Y} d(y,X), \mathop{sup}\limits_{x\in X} d(x,Y)\} 
++ \max\{\mathop{sup}\limits_{y\in Y} d(y,Z), \mathop{sup}\limits_{z\in Z} d(z,Y)\} \\
+ &\geq \max \{ \mathop{sup}\limits_{x\in X} d(x,Y) + \mathop{sup}\limits_{y\in Y} d(y,Z), \mathop{sup}\limits_{y\in Y} d(y,X) + \mathop{sup}\limits_{z\in Z} d(z,Y)\}
+\end{align*}
+
+
+\vspace{1em}
+\vspace{1em}
+En fait, $\mathop{sup}\limits_{x\in X} d(x,Y) + \mathop{sup}\limits_{y\in Y} d(y,Z)$ est forcément supérieur ou égal à $d_{H}(X,Z)$
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{Exercice 2}
+
+\textit{Notations}
+
+\begin{itemize}
+    
+
+    \item $(\underline{x_n})_{n \in \mathbb{N} } \in K^\mathbb{N}$ une suite de $K$
+        \[
+            \underline{x_n} = \left( x_n^{(0)} , \ldots, x_n^{(p)}\right) \in \prod_{t=0}^p K_t^\mathbb{N} 
+        \]
+
+
+    \item $(x_n^{(p)})_{n \in \mathbb{N} } \in K_p^{\mathbb{N} }$ une suite de $K_p$, qui est la projection de $\left( \underline{x_n} \right) _{n \in \mathbb{ N}}$ sur $K_p$
+    \item $(\underline{x_{\phi(n)}})_{n \in \mathbb{N} }$ une sous-suite de $(\underline{x_n})_{n \in \mathbb{N} }$
+    \item $\underline{\lambda}$ un vecteur dans  $K$ :
+        \[
+            \underline{\lambda} = \left( \lambda^{(1)}, \ldots, \lambda^{(p)} \right) 
+        \]
+        
+        
+
+\end{itemize}
+
+\noindent \textit{Solution}
+
+Comme $(E_0, d_0),\ldots,(E_n,d_n)$ sont des espaces métriques compactes, soit $(\underline{x_n})_{n \in \mathbb{N} } \in K^\mathbb{N}$ une suite de $K$
+        \[
+            \underline{x_n} = \left( x_n^{(0)} , \ldots, x_n^{(p)}\right) \in \prod_{t=0}^p K_t^\mathbb{N} 
+        \]
+
+        On construit une sous-suite $( \underline{x_{\phi(n)}})_{n \in \mathbb{N} }$ de $(\underline{x_n})_{n \in \mathbb{N} }$ de manière suivant :
+        \begin{itemize}
+            \item On partir de la suite $(\underline{x_n})_{n \in \mathbb{N} }$. Comme $K_0$ est compacte, de la suite $\left( x_n^{(0)} \right)_{n \in \mathbb{N}}$,  on extrait une sous-suite $\left( x_{\phi_0(n)}^{(0)} \right)$ qui tend vers $\lambda^{(0)} \in K_0$.
+            \item Revient à la suite $\left( \underline{x_{\phi_0(n)}} \right)_{n \in \mathbb{N} }$. Comme $K_1$ est compacte, de la suite $(x_{\phi_0(n)}^{(1)})$, on extrait une sous-suite $\left( x_{\phi_0 \circ\phi_1(n)}^{(1)} \right)$ qui tend vers $\lambda^{(1)} \in K_1$.
+            \item On continue de même façon pour tout $p \in \mathbb{N}$, on extrait une sous-suite $\left( x_{\phi_0 \circ \ldots \circ \phi_p(n)}^{(p)} \right)$ qui tend vers $\lambda^{(p)} \in K_p$.
+            \item Finalement, en notant $\phi = \phi_0 \circ \phi_1 \circ \ldots \phi_p$, on obtient une sous-suite $\left( \underline{x_{\phi(n)}} \right) _{n \in \mathbb{N} }$ de $(\underline{x_n})_{n \in \mathbb{N} }\in K^\mathbb{N}$, qui suffit :
+                \[
+                \forall p \in \mathbb{N}, \;\forall \varepsilon_p > 0, \;\exists N_p \in \mathbb{N},\; \forall n \geq N_p, d_p \left( x_{\phi(n)}^{(p)} ,\; \lambda^{(p)} \right) < \varepsilon_p
+                \]
+            \item Le premier terme de cette sous-suite va être déterminer.
+                
+        \end{itemize}
+
+        Pour montrons que $K$ est une espace métrique compacte, il suffit de montrer que la sous-suite $\left( \underline{x_{\phi(n)}} \right)$ que nous avons construit converge vers cette valeur, c'est-à-dire : 
+                \[
+                    \underline{x_{\phi(n)}} = \left( x_{\phi(n)}^{(0)} , \ldots, x_{\phi(n)}^{(p)}\right) \underset{n \rightarrow +\infty} {\buildrel d \over \longrightarrow}\left( \lambda^{(0)} , \ldots, \lambda^{(p)}\right) = \underline{\lambda} \in \prod_{t=0}^p K_t
+                \]
+
+Soit $\varepsilon >0$, on prend  $\varepsilon_1 = \varepsilon_2 = \ldots = \varepsilon_p = \varepsilon / 2$, donc il existe les valeurs de  $N_1, \; N_2, \ldots, N_p$.
+
+On prend $N = \min(N_1, N_2, \ldots, N_p)$, et on constuit une nouvelle sous-suite $\left( \underline{x'_{\phi(n)}} \right)$ qui est une partie de $(\underline{x_{\phi(n)}})$, seulement à partir de $N$ (on peut aisément vérifier il est bien définie, car il a des termes infines), alors :
+\[
+d(\underline{x_{\phi(n)}}, \underline{\lambda}) \le \sum_{n=0}^{\infty} \frac{1}{2^n} \min (1, \frac{\varepsilon}{2} ) \le  \sum_{n=0}^{\infty} \frac{1}{2^n}  . \frac{\varepsilon}{2} < \varepsilon
+\]
+
+Par conséquent, on a bien montré que $K$ est une espace métrique compacte.
+\newpage
+
+\section{Exercice 3}
+\textit{Notations}
+
+\begin{itemize}
+    \item $A=\{x_{1},x_{2},\dots, x_{d}\}$
+    \item $C=\{\sum\limits_{i=1}^{d}\lambda_{i}x_{i}, \forall i \in \{1,2,\dots,d\},\lambda_{i}\geq0,\sum\limits_{i=1}^{d}\lambda_{i}=1\}$
+
+\end{itemize}
+On veut montrer que $Conv(A)=C$, donc on peut montrer par double inclusion.\par
+\vspace{2em}
+\textbf{\Large{$Conv(A)\subset C$}}\\
+\par
+Tout d'abord, montrons que C est bien convexe.
+Soit M et N deux points dans l'ensemble C et $\forall t \in [0,1]$, on considère le point $tM+(1-t)N$.\par
+Soit $M=\sum\limits_{i=1}^{d}\lambda_{i}x_{i}$ et $N=\sum\limits_{i=1}^{d}\lambda_{i}'x_{i}$ avec $\sum\limits_{i=1}^{d}\lambda_{i}=\sum\limits_{i=1}^{d}\lambda_{i}'=1$.Donc,
+\begin{equation}
+\begin{aligned}
+tM+(1-t)N&=t\sum\limits_{i=1}^{d}\lambda_{i}x_{i}+(1-t)\sum\limits_{i=1}^{d}\lambda_{i}'x_{i}\\
+&=\sum\limits_{i=1}^{d}(t\lambda_{i}+(1-t)\lambda_{i}')x_{i}
+\end{aligned}\nonumber
+\end{equation}
+\hspace{2em}et comme on a $\sum\limits_{i=1}^{d}(t\lambda_{i}+(1-t)\lambda_{i}')=t\sum\limits_{i=1}^{d}\lambda_{i}+(1-t)\sum\limits_{i=1}^{d}\lambda_{i}'=1$, le point $tM+(1-t)N$ est bien dans l'ensemble C, donc C est convexe.\par
+De plus, d'après la définition, $Conv(A)$ est le plus petit convexe contenant A. Or C est aussi un convexe contenant A, donc C contient $Conv(A)$.\\
+
+\vspace{2em}
+\textbf{\Large{$C \subset Conv(A)$}}\\
+\par 
+C'est-à-dire montrer que s'il y a d points $\{x_{1},\dots,x_{d}\}$ dans Conv(A), pour tous les  systèmes de $\{\lambda_{1},\dots,\lambda_{d}\}$ positives ou nulles avec $\sum\limits_{i=1}^{d}\lambda_{i}=1$, le point 
+$\sum\limits_{i=1}^{d}\lambda_{i}x_{i}$ appartient à Conv(A). On le note $H_{d}$. \par
+Montrons par récurrence que $H_{d}$ est vraie pour tout $d\geq 1$.\par
+Initialisation:\par
+Lorsque $d=1$, on a $\lambda_{1}=1$, le point $x_{1}$ est bien dans Conv(A), donc $H_{1}$ est vraie. \par
+
+Hérédité:\par
+Supposons que $H_{n}$ est vraie jusqu'à l'ordre d-1 et on considère le point $\sum\limits_{i=1}^{d}\lambda_{i}x_{i}$.\par
+Si $\lambda_{1}=1$, il y a rien à montrer, c'est le même avec le premier cas.\par
+Si $\lambda_{1} <1$, alors $\sum\limits_{i=2}^{d}\lambda_{i}=1-\lambda_{1}>0$. On pose 
+$\mu_{i}=\frac{\lambda_{i}}{1-\lambda_{1}}$, $i \in \{2,3,\dots,d\}$, alors $\sum\limits_{i=2}^{d}\mu_{i}=1$.\\
+Comme on a supposé que $H_{d-1}$ est vraie, donc le point $\sum\limits_{i=2}^{d}\mu_{i}x_{i}$ est bien dans $Conv(A)$. On le note y. Or $x_{1} \in Conv(A)$, donc :
+\begin{equation}
+    \sum\limits_{i=2}^{d}\lambda_{i}x_{i}=\lambda_{1}x_{1}+(1-\lambda_{1})y \in Conv(A)\nonumber
+\end{equation}
+car $x_{1} \in Conv(A)$, $y \in Conv(A)$, Conv(A) est convexe et $\lambda_{1} \in [0,1[$.\par
+Donc on a montré que $H_{n} est vraie.$
+C'est-à-dire, $C \subset Conv(A)$.\par
+
+\vspace{2em}
+\textbf{\Large{Conclusion:}}\\
+\begin{equation}
+    C=Conv(A)\nonumber
+\end{equation}
+C'est-à-dire,
+\begin{equation}
+    Conv(A)=\{\sum\limits_{i=1}^{d}\lambda_{i}x_{i}, \forall i \in \{1,2,\dots,d\},\lambda_{i}\geq0,\sum\limits_{i=1}^{d}\lambda_{i}=1\}\nonumber
+\end{equation}
+\end{document}
+
