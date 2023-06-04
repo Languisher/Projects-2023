@@ -1,4 +1,4 @@
-# 23-Projet
+# 23-Project
 
 This repository contains these projects :
 
